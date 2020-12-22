@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+    monitor-server-db:
+        image: mariadb:10.3
+        restart: always
+        environment:
+          MYSQL_DATABASE: 'accessmonitor'
+          MYSQL_USER: 'accessmonitor'
+          MYSQL_PASSWORD: 'accessmonitor'
+          MYSQL_ROOT_PASSWORD: 'root'
+        command: --init-file /data/application/db.sql
+        ports:
+            - '3306:3306'
+        volumes:
+            - ./db.sql:/data/application/db.sql
