@@ -21,20 +21,16 @@ import { AmpModule } from './amp/amp.module';
 import { StampModule } from './stamp/stamp.module';
 import { CrawlerModule } from './crawler/crawler.module';
 
-import { readFileSync } from 'fs';
-
-const databaseConfig = JSON.parse(readFileSync('../monitor_db.json').toString());
-
 @Module({
   imports: [
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: databaseConfig.host,
+      host: 'monitor-server-db.cptroy7wthdz.eu-west-1.rds.amazonaws.com',
       port: 3306,
-      username: databaseConfig.user,
-      password: databaseConfig.password,
-      database: databaseConfig.database,
+      username: 'admin',
+      password: '`T*`qvu\\e9>7?U.3',
+      database: 'accessmonitor',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
     }),
