@@ -1,6 +1,8 @@
 node_modules
 
 public/stamps
+.idea
+configs
 *.iml
 
 dist/
