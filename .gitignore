@@ -6,3 +6,4 @@ configs
 *.iml
 
 dist/
+/.secrets/
