@@ -9,8 +9,8 @@ Parameters:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /config/github/username
   GithubRepo:
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: Fargate-ECSCluster-Cloudformation
+    Type: String
+    Default: monitor-server
   GithubBranch:
     Type: String
     Default: develop-aws
