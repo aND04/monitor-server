@@ -1,4 +1,7 @@
 version: 0.2
+env:
+  parameter-store:
+    SECRETS_BUCKET_NAME: /config/secrets-bucket/bucket-name
 
 phases:
   install:
@@ -12,7 +15,7 @@ phases:
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
       - echo Getting secrets from s3
-      - aws s3 cp arn:aws:s3:::ms-build-secrets/ . --recursive
+      - aws s3 cp s3://${SECRETS_BUCKET_NAME}/ . --recursive
       - ls -la
   build:
     commands:

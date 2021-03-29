@@ -4,7 +4,7 @@ Description: The CloudFormation template for the CodePipeline.
 Parameters:
   Stage:
     Type: String
-    Default: dev
+    Default: ms-cf
   GithubUserName:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /config/github/username
@@ -20,6 +20,9 @@ Parameters:
   ContainerPort:
     Type: Number
     Default: 3000
+  SecretsBucketName:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /config/secrets-bucket/bucket-name
 
 Resources:
 
@@ -44,9 +47,9 @@ Resources:
           - Effect: Allow
             Principal:
               Service: codepipeline.amazonaws.com
-            Action: 'sts:AssumeRole'
+            Action: sts:AssumeRole
       ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/AdministratorAccess'
+        - arn:aws:iam::aws:policy/AdministratorAccess
 
   # Create Access Role for CodeBuild
   CodeBuildExecutionRole:
@@ -70,9 +73,32 @@ Resources:
           - Effect: Allow
             Principal:
               Service: cloudformation.amazonaws.com
-            Action: 'sts:AssumeRole'
+            Action: sts:AssumeRole
       ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/AdministratorAccess'
+        - arn:aws:iam::aws:policy/AdministratorAccess
+
+  # Read Access s3 secrets bucket
+  SecretsBucketAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ReadAccessSecretsBucket
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource: !Sub arn:aws:s3:::${SecretsBucketName}/*
+              - Effect: Allow
+                Action: ssm:GetParameters
+                Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/config/secrets-bucket/bucket-name
 
   # Create the BuildProject with required Build information
   BuildProject:
