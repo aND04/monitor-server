@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -22,9 +23,11 @@ import { StampModule } from './stamp/stamp.module';
 import { CrawlerModule } from './crawler/crawler.module';
 
 import { readFileSync } from 'fs';
+import { AccessibilityEvaluationRequestModule } from './accessibility-evaluation-request/accessibility-evaluation-request.module';
 
-const databaseConfig = JSON.parse(readFileSync('../monitor_db.json').toString());
-
+const databaseConfig = JSON.parse(
+  readFileSync('../monitor_db.json').toString()
+);
 
 @Module({
   imports: [
@@ -42,6 +45,7 @@ const databaseConfig = JSON.parse(readFileSync('../monitor_db.json').toString())
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
+    ConfigModule.forRoot(),
     AuthModule,
     UserModule,
     ObservatoryModule,
@@ -54,9 +58,10 @@ const databaseConfig = JSON.parse(readFileSync('../monitor_db.json').toString())
     AmpModule,
     StampModule,
     CrawlerModule,
-    //NestCrawlerModule
+    //NestCrawlerModule,
+    AccessibilityEvaluationRequestModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

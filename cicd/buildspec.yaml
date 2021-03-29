@@ -2,6 +2,7 @@ version: 0.2
 env:
   parameter-store:
     SECRETS_BUCKET_NAME: /config/secrets-bucket/bucket-name
+    CHECKLIST_SERVICE_URL: /config/checklist-service/url
 
 phases:
   install:
@@ -16,7 +17,8 @@ phases:
       - IMAGE_TAG=${COMMIT_HASH:=latest}
       - echo Getting secrets from s3
       - aws s3 cp s3://${SECRETS_BUCKET_NAME}/ . --recursive
-      - ls -la
+      - touch .env
+      - echo CHECKLIST_SERVICE_URL=${CHECKLIST_SERVICE_URL} >> .env
   build:
     commands:
       - echo Build started on `date`
