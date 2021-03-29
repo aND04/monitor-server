@@ -1,6 +1,10 @@
-FROM node:15.12-alpine AS builder
+FROM node:14.16-alpine AS builder
 
 WORKDIR /usr/src/app
+
+RUN apk add python make gcc g++
+
+#npm install -g npm@7.7.5
 
 COPY . .
 
