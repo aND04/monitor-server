@@ -5,3 +5,15 @@ services:
     build: .
     ports:
       - 8080:3000
+  ms-db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: accessmonitor
+    ports:
+      - 3306:3306
+    volumes:
+      - ms-db-vol:/var/lib/mysql
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+volumes:
+  ms-db-vol:

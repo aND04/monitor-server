@@ -16,6 +16,7 @@ export class AccessibilityEvaluationRequest {
     type: 'varchar',
     length: 24,
     nullable: false,
+    unique: true,
   }) // 605f5a316d61f71fe47c66f2
   ChecklistUuid: string;
 

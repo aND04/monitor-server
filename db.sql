@@ -176,4 +176,16 @@ CREATE TABLE `Website` (
   CONSTRAINT `EntityId_fk` FOREIGN KEY (`EntityId`) REFERENCES `Entity` (`EntityId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `AccessibilityEvaluationRequest`;
+CREATE TABLE `AccessibilityEvaluationRequest`
+(
+    `AccessibilityEvaluationRequestId` INT(11)     NOT NULL AUTO_INCREMENT,
+    `UserId`                           INT(11) DEFAULT NULL,
+    `ChecklistUuid`                    VARCHAR(24) NOT NULL,
+    `Processed` BOOLEAN NOT NULL DEFAULT '0',
+    PRIMARY KEY (`AccessibilityEvaluationRequestId`),
+    UNIQUE KEY `AccessibilityEvaluationRequestId_UNIQUE` (`AccessibilityEvaluationRequestId`),
+    CONSTRAINT `AccessibilityEvaluationRequestUserId_FK` FOREIGN KEY (`UserId`) REFERENCES `User` (`UserId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 SET FOREIGN_KEY_CHECKS = 1;
