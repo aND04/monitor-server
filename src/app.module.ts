@@ -23,7 +23,7 @@ import { StampModule } from './stamp/stamp.module';
 import { CrawlerModule } from './crawler/crawler.module';
 
 import { readFileSync } from 'fs';
-import { AccessibilityEvaluationRequestModule } from './accessibility-evaluation-request/accessibility-evaluation-request.module';
+import { UsabilityEvaluationRequestModule } from './usability-evaluation-request/usability-evaluation-request.module';
 
 const databaseConfig = JSON.parse(
   readFileSync('../monitor_db.json').toString()
@@ -59,7 +59,7 @@ const databaseConfig = JSON.parse(
     StampModule,
     CrawlerModule,
     //NestCrawlerModule,
-    AccessibilityEvaluationRequestModule,
+    UsabilityEvaluationRequestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -3,7 +3,7 @@ import { IChecklistForm } from './dto/checklist.interface';
 import { Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
 import { ConfigService } from '@nestjs/config';
-import { AccessibilityEvaluationRequest } from './accessibility-evaluation-request.entity';
+import { UsabilityEvaluationRequest } from './usability-evaluation-request.entity';
 import {
   EAccEvalRequestStatus,
   IAccEvalSyncAnswer,
@@ -13,18 +13,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class AccessibilityEvaluationRequestService {
+export class UsabilityEvaluationRequestService {
   private readonly serviceEndpoint: string;
   constructor(
     private config: ConfigService,
     private http: HttpService,
-    @InjectRepository(AccessibilityEvaluationRequest)
-    private readonly accessibilityEvaluationRequestRepository: Repository<AccessibilityEvaluationRequest>
+    @InjectRepository(UsabilityEvaluationRequest)
+    private readonly usabilityEvaluationRequestRepository: Repository<UsabilityEvaluationRequest>
   ) {
     this.serviceEndpoint = this.config.get<string>('CHECKLIST_SERVICE_URL');
   }
+
   requestChecklistsFromService(): Observable<AxiosResponse<IChecklistForm[]>> {
     return this.http.get<IChecklistForm[]>(`${this.serviceEndpoint}/`);
+  }
+
+  async findAll(): Promise<UsabilityEvaluationRequest[]> {
+    return this.usabilityEvaluationRequestRepository.find();
   }
 
   getChecklistFromServiceById(
@@ -37,20 +42,17 @@ export class AccessibilityEvaluationRequestService {
 
   async sync(req: IChecklistSync): Promise<IAccEvalSyncAnswer> {
     const answer = <IAccEvalSyncAnswer>{ sync: true };
-    const aer = await this.accessibilityEvaluationRequestRepository.findOne({
+    const aer = await this.usabilityEvaluationRequestRepository.findOne({
       where: { ChecklistUuid: req.checklistUuid },
     });
-    if (!!aer) {
-      if (aer.Processed) {
-        answer.status = EAccEvalRequestStatus.ALREADY_SYNC;
-      }
-    } else {
-      const accessibilityEvaluationRequest = new AccessibilityEvaluationRequest();
-      accessibilityEvaluationRequest.UserId = req.userId;
-      accessibilityEvaluationRequest.ChecklistUuid = req.checklistUuid;
-      accessibilityEvaluationRequest.Processed = true;
-      await this.accessibilityEvaluationRequestRepository.save(
-        accessibilityEvaluationRequest
+    if (!aer) {
+      const usabilityEvaluationRequest = new UsabilityEvaluationRequest();
+      usabilityEvaluationRequest.UserId = req.userId;
+      usabilityEvaluationRequest.ChecklistUuid = req.checklistUuid;
+      usabilityEvaluationRequest.Processed = false;
+      usabilityEvaluationRequest.CreatedAt = req.createdAt;
+      await this.usabilityEvaluationRequestRepository.save(
+        usabilityEvaluationRequest
       );
       answer.status = EAccEvalRequestStatus.SUCCESS;
     }

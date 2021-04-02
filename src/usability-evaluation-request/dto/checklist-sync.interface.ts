@@ -2,6 +2,7 @@ export interface IChecklistSync {
   userId: number;
   checklistUuid: string;
   processed: boolean;
+  createdAt: Date;
 }
 
 export enum EAccEvalRequestStatus {
