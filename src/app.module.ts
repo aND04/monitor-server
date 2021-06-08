@@ -23,6 +23,7 @@ import { CrawlerModule } from './crawler/crawler.module';
 
 import { readFileSync } from 'fs';
 import { DirectoryModule } from './directory/directory.module';
+import {ChecklistManagerModule} from "./checklist-manager/checklist-manager.module";
 
 const databaseConfig = JSON.parse(readFileSync('../monitor_db.json').toString());
 
@@ -55,7 +56,8 @@ const databaseConfig = JSON.parse(readFileSync('../monitor_db.json').toString())
     StampModule,
     CrawlerModule,
     DirectoryModule,
-    //NestCrawlerModule
+    //NestCrawlerModule,
+    ChecklistManagerModule
   ],
   controllers: [AppController],
   providers: [AppService],

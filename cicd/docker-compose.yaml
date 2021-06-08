@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  ms-db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: accessmonitor
+    ports:
+      - 3306:3306
+    volumes:
+      - ms-db-vol:/var/lib/mysql
+volumes:
+  ms-db-vol:
